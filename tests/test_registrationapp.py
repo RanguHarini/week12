@@ -1,6 +1,8 @@
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
@@ -10,10 +12,22 @@ import time
 # Fixture for setting up and tearing down the driver
 @pytest.fixture
 def setup_teardown():
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install())
+    options = Options()
+
+    # Change this path if Chrome is installed elsewhere
+    options.binary_location = (
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe"
     )
-    driver.maximize_window()
+
+    # Run Chrome without opening a visible browser window
+    options.add_argument("--headless=new")
+    options.add_argument("--window-size=1920,1080")
+
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=options
+    )
+
     yield driver
     driver.quit()
 
@@ -28,7 +42,7 @@ def test_registration_page(setup_teardown):
         "Student Registration Form"
 
 
-# Test 2: Name field is available
+# Test 2: Registration fields are available
 def test_registration_fields(setup_teardown):
     driver = setup_teardown
     driver.get("http://127.0.0.1:5001/")
