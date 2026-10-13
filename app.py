@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -10,9 +11,18 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    username = request.form['username']
+    name = request.form['name']
+    email = request.form['email']
+    phone = request.form['phone']
+    course = request.form['course']
 
-    return render_template('success.html', name=username)
+    return render_template(
+        'success.html',
+        name=name,
+        email=email,
+        phone=phone,
+        course=course
+    )
 
 
 if __name__ == '__main__':
